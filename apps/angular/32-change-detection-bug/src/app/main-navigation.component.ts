@@ -12,7 +12,7 @@ interface MenuItem {
   selector: 'app-nav',
   imports: [RouterLink, RouterLinkActive, NgFor],
   template: `
-    <ng-container *ngFor="let menu of menus">
+    <ng-container *ngFor="let menu of menus; trackBy: trackMenu">
       <a
         class="rounded-md border px-4 py-2"
         [routerLink]="menu.path"
@@ -34,6 +34,10 @@ interface MenuItem {
 })
 export class NavigationComponent {
   @Input() menus!: MenuItem[];
+
+  trackMenu(index: number, menu: MenuItem) {
+    return menu ? menu.path : undefined; // need a unique value
+  }
 }
 
 @Component({

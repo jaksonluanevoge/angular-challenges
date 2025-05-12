@@ -7,4 +7,8 @@ import { RouterLink } from '@angular/router';
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  openDialog() {
+    throw new Error('Method not implemented.');
+  }
+}

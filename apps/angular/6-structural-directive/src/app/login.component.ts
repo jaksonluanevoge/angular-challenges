@@ -1,16 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ButtonComponent } from './button.component';
 import { InformationComponent } from './information.component';
-import {
-  admin,
-  client,
-  everyone,
-  manager,
-  reader,
-  readerAndWriter,
-  writer,
-} from './user.model';
 import { UserStore } from './user.store';
 
 @Component({
@@ -19,13 +10,15 @@ import { UserStore } from './user.store';
   template: `
     <header class="flex items-center gap-3">
       Log as :
-      <button app-button (click)="admin()">Admin</button>
-      <button app-button (click)="manager()">Manager</button>
-      <button app-button (click)="reader()">Reader</button>
-      <button app-button (click)="writer()">Writer</button>
-      <button app-button (click)="readerWriter()">Reader and Writer</button>
-      <button app-button (click)="client()">Client</button>
-      <button app-button (click)="everyone()">Everyone</button>
+      <button app-button (click)="loginAs('Admin')">Admin</button>
+      <button app-button (click)="loginAs('Manager')">Manager</button>
+      <button app-button (click)="loginAs('Reader')">Reader</button>
+      <button app-button (click)="loginAs('Writer')">Writer</button>
+      <button app-button (click)="loginAs('Reader and Writer')">
+        Reader and Writer
+      </button>
+      <button app-button (click)="loginAs('Client')">Client</button>
+      <button app-button (click)="loginAs('Everyone')">Everyone</button>
     </header>
 
     <app-information></app-information>
@@ -36,27 +29,46 @@ import { UserStore } from './user.store';
   `,
 })
 export class LoginComponent {
-  constructor(private userStore: UserStore) {}
+  constructor(
+    private userStore: UserStore,
+    private router: Router,
+  ) {}
 
-  admin() {
-    this.userStore.add(admin);
+  loginAs(role: string) {
+    this.userStore.add([role]);
+
+    this.redirectToDashboard(role);
   }
-  manager() {
-    this.userStore.add(manager);
-  }
-  reader() {
-    this.userStore.add(reader);
-  }
-  writer() {
-    this.userStore.add(writer);
-  }
-  readerWriter() {
-    this.userStore.add(readerAndWriter);
-  }
-  client() {
-    this.userStore.add(client);
-  }
-  everyone() {
-    this.userStore.add(everyone);
+
+  private redirectToDashboard(role: string) {
+    let targetRoute: string;
+
+    switch (role) {
+      case 'Admin':
+        targetRoute = '/dashboard/admin';
+        break;
+      case 'Manager':
+        targetRoute = '/dashboard/manager';
+        break;
+      case 'Reader and Writer':
+        targetRoute = '/dashboard/reader-writer';
+        break;
+      case 'Reader':
+        targetRoute = '/dashboard/reader';
+        break;
+      case 'Writer':
+        targetRoute = '/dashboard/writer';
+        break;
+      case 'Client':
+        targetRoute = '/dashboard/client';
+        break;
+      case 'Everyone':
+        targetRoute = '/dashboard/default';
+        break;
+      default:
+        targetRoute = '/dashboard/default';
+    }
+
+    this.router.navigate([targetRoute]);
   }
 }

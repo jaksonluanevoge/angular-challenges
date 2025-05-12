@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { JoinComponent } from './pages/join.component';
+import { CanDeactivateGuard } from './candeactivate.guard';
 import { PageComponent } from './pages/page.component';
 
 export const appRoutes: Route[] = [
@@ -10,7 +10,9 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'form',
-    loadComponent: () => JoinComponent,
+    loadComponent: () =>
+      import('./ui/form.component').then((m) => m.FormComponent),
+    canDeactivate: [CanDeactivateGuard],
   },
   {
     path: 'page-1',

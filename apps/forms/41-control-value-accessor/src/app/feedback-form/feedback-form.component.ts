@@ -8,34 +8,26 @@ import {
 import { RatingControlComponent } from '../rating-control/rating-control.component';
 
 @Component({
-  imports: [RatingControlComponent, ReactiveFormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, RatingControlComponent],
   selector: 'app-feedback-form',
   templateUrl: 'feedback-form.component.html',
   styleUrls: ['feedback-form.component.scss'],
 })
 export class FeedbackFormComponent {
-  @Output()
-  readonly feedBackSubmit: EventEmitter<Record<string, string | null>> =
-    new EventEmitter<Record<string, string | null>>();
+  @Output() submitForm: EventEmitter<Record<string, string | null>> =
+    new EventEmitter();
 
   readonly feedbackForm = new FormGroup({
-    name: new FormControl('', {
-      validators: Validators.required,
-    }),
-    email: new FormControl('', {
-      validators: Validators.required,
-    }),
+    name: new FormControl('', { validators: Validators.required }),
+    email: new FormControl('', { validators: Validators.required }),
     comment: new FormControl(),
+    rating: new FormControl(null, { validators: Validators.required }),
   });
 
-  rating: string | null = null;
-
-  submitForm(): void {
-    this.feedBackSubmit.emit({
-      ...this.feedbackForm.value,
-      rating: this.rating,
-    });
-
-    this.feedbackForm.reset();
+  submitFormData(): void {
+    if (this.feedbackForm.valid) {
+      this.submitForm.emit(this.feedbackForm.value);
+    }
   }
 }

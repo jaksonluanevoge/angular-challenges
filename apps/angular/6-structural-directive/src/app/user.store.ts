@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from './user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserStore {
-  private user = new BehaviorSubject<User | undefined>(undefined);
-  user$ = this.user.asObservable();
+  // BehaviorSubject para armazenar as funções do usuário (roles)
+  private userRolesSubject = new BehaviorSubject<string[]>([]);
+  user$ = this.userRolesSubject.asObservable(); // Observable para ser acessado em outros componentes
 
-  add(user: User) {
-    this.user.next(user);
+  // Função para adicionar as funções do usuário
+  add(roles: string[]): void {
+    this.userRolesSubject.next(roles);
+  }
+
+  // Função para limpar as funções do usuário
+  clear(): void {
+    this.userRolesSubject.next([]);
   }
 }

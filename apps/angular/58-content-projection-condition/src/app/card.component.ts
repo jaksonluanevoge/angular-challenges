@@ -3,17 +3,19 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 @Component({
   selector: 'app-card',
   template: `
-    @if (small()) {
-      <ng-content select="[title]" />
-      <ng-content select="[message]" />
-    } @else {
-      <div class="p-4">
+    <div class="p-4">
+      <ng-container *ngIf="small(); else largeTitle">
+        <ng-content select="[title]" />
+      </ng-container>
+
+      <ng-template #largeTitle>
         <div class="text-2xl">
           <ng-content select="[title]" />
         </div>
-        <ng-content select="[message]" />
-      </div>
-    }
+      </ng-template>
+
+      <ng-content select="[message]" />
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

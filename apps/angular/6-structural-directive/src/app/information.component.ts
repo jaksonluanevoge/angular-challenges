@@ -8,12 +8,12 @@ import { UserStore } from './user.store';
   template: `
     <h2 class="mt-10 text-xl">Information Panel</h2>
     <!-- admin can see everything -->
-    <div>visible only for super admin</div>
-    <div>visible if manager</div>
-    <div>visible if manager and/or reader</div>
-    <div>visible if manager and/or writer</div>
-    <div>visible if client</div>
-    <div>visible for everyone</div>
+    <div *hasRole="'Admin'">visible only for super admin</div>
+    <div *hasRole="'Manager'">visible if manager</div>
+    <div *hasRole="'Reader'">visible if manager and/or reader</div>
+    <div *hasRole="'Writer'">visible if manager and/or writer</div>
+    <div *hasRole="'Client'">visible if client</div>
+    <div *hasRole="'Default'">visible for everyone</div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

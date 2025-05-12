@@ -1,11 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CanComponentDeactivate } from '../candeactivate.guard';
 
 @Component({
   selector: 'app-form',
   imports: [ReactiveFormsModule],
   template: `
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="mx-auto max-w-screen-sm	space-y-4">
       <div>
         <label class="sr-only" for="name">Name</label>
         <input
@@ -61,7 +65,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormComponent {
+export class FormComponent implements CanComponentDeactivate {
   private fb = inject(FormBuilder);
 
   form = this.fb.nonNullable.group({
@@ -73,5 +77,14 @@ export class FormComponent {
 
   onSubmit() {
     if (this.form.valid) this.form.reset();
+  }
+
+  canDeactivate(): boolean {
+    if (this.form.dirty) {
+      return window.confirm(
+        'Você tem informações não salvas, deseja realmente sair?',
+      );
+    }
+    return true;
   }
 }

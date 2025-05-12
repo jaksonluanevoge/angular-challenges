@@ -1,0 +1,26 @@
+
+.text {
+   font-size: var(--font-size, 10pxX);
+    color: var(--color, black);
+}
+  
+:host-context(.error) {
+    --font-size: 30px;
+    --color: red;
+}
+  
+:host-context(.warning) {
+    --font-size: 25px;
+    --color: orange;
+}
+  
+:host-context(.blue) {
+    --font-size: 15px;
+    --color: blue;
+}
+
+.static-text {
+    font-size: var(--font-size);
+    color: var(--color);
+}
+  
